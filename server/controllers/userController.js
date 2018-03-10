@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import User from '../models/user';
+import PriceTracker from '../helpers/PriceTracker'
 
 export const getUsers = (req,res) => {
-
+  console.log(PriceTracker.monero)
   User.find().exec((err,users) => {
     if(err){
     return res.json({'success':false,'message':'Some Error'});
@@ -28,11 +29,12 @@ export const updateUser = (req,res) => {
   const coinName = req.body.coinName
   const amount = req.body.amount
 
+
   User.findById(id, function (err, user) {
     if (err) return handleError(err);
       user[coinName] = parseInt(amount)
       /// if user USD balance > amount * price of coinName
-      
+      /// Price class would be exchange that keeps
       user.save(function (err, updatedUser) {
         if (err) return handleError(err);
       res.send(updatedUser);
